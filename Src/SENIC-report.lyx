@@ -1,0 +1,796 @@
+#LyX 2.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 544
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\use_default_options true
+\begin_modules
+knitr
+\end_modules
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\use_minted 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Report on SENIC Data Set
+\end_layout
+
+\begin_layout Author
+Saikat Bera, Presidency University, KOLKATA
+\end_layout
+
+\begin_layout Abstract
+The 
+\series bold
+SENIC
+\series default
+ data set contains information on certain variables from which we are interested
+ in using age, number of beds, infection risk, and available facilities/services
+ to predict the average length of hospital stay of all patients in hospital.
+\end_layout
+
+\begin_layout Abstract
+We first load the dataset and check the head so as to confirm our load:
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=F>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+senic<-read.table("E:
+\backslash
+
+\backslash
+B.Sc.
+ Statistics Hons
+\backslash
+
+\backslash
+College
+\backslash
+
+\backslash
+6th Sem
+\backslash
+
+\backslash
+Exploratory Data Analysis
+\backslash
+
+\backslash
+Data
+\backslash
+
+\backslash
+SENIC.txt")
+\end_layout
+
+\begin_layout Plain Layout
+
+names(senic)<-c('id','stay','age','infectionRisk','cultRatio','chestXrayRatio','
+numBeds',
+\end_layout
+
+\begin_layout Plain Layout
+
+                'medSchool','region','avgDailyCensus','numNurses','facilities')
+\end_layout
+
+\begin_layout Plain Layout
+
+head(senic) 
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The 12 variables are: 
+\end_layout
+
+\begin_layout Itemize
+id: Identification number of hospital, 1-113 
+\end_layout
+
+\begin_layout Itemize
+stay: Average length of stay of all patients in hospital (in days) 
+\end_layout
+
+\begin_layout Itemize
+age: Average age of patients (years) 
+\end_layout
+
+\begin_layout Itemize
+infectionRisk: Average estimated probability of acquiring infection in hospital
+ (in percentage)
+\end_layout
+
+\begin_layout Itemize
+cultRatio: Routine culturing ratio, which is the ratio of number of cultures
+ performed to number of patient without signs or symptoms of hospital acquired
+ infection, times 100.
+\end_layout
+
+\begin_layout Itemize
+chestXrayRatio: Routine chest x-ray ratio, which is the ratio of number
+ of x-rays performed to the number of patients without signs or symptoms
+ of pneumonia, times 100.
+ 
+\end_layout
+
+\begin_layout Itemize
+numBeds: Average number of beds in the hospital during study period.
+ 
+\end_layout
+
+\begin_layout Itemize
+medSchool: Medical school affiliation 
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+1 = yes
+\end_layout
+
+\begin_layout Itemize
+2 = no 
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+region: Geographic region
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+1 = NE
+\end_layout
+
+\begin_layout Itemize
+2 = NC 
+\end_layout
+
+\begin_layout Itemize
+3 = S
+\end_layout
+
+\begin_layout Itemize
+4 = W 
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+avgDailyCensus: Average daily census, which is the average number of patients
+ in hospital per day during study period.
+ 
+\end_layout
+
+\begin_layout Itemize
+numNurses: Average number of full time equivalent registered and licensed
+ practical nurses during study period (number full time + one half the number
+ part time).
+ 
+\end_layout
+
+\begin_layout Itemize
+facilities: Available facilities and services, which is percent of 35 potential
+ facilities and services that are provided by the hospital.
+ 
+\end_layout
+
+\begin_layout Standard
+We extract our required columns and we’ll use this modified data for our
+ work further:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=F>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+df<-senic[,c('stay','age','infectionRisk','numBeds','facilities')]
+\end_layout
+
+\begin_layout Plain Layout
+
+head(df) 
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We create a pairs plot from the correlaton matrix:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=F>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+pairs(df,pch=16,col='royalblue', main='Pairs plot of the variables')
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We cannot conclude any specific relationships from this pairs plot.
+ However, the number of beds and facilities have a somewhat linear relatioship.
+\end_layout
+
+\begin_layout Standard
+We might want to fit a linear model to the relationship between stay and
+ facilities: 
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=F>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+model<-lm(stay~facilities,data=df)
+\end_layout
+
+\begin_layout Plain Layout
+
+summary(model) 
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The estimated slope and its standard error are as follows: 
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=F>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+summary(model)$coefficients[2,c(1,2)] 
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We then continue and plot a graph of the two variables and our estimated
+ linear model:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=F>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+plot(df$facilities,df$stay,
+\end_layout
+
+\begin_layout Plain Layout
+
+     main='Scatterplot of facilities and stay',
+\end_layout
+
+\begin_layout Plain Layout
+
+     xlab='facilities',ylab='stay', pch=16,col='seashell3')
+\end_layout
+
+\begin_layout Plain Layout
+
+abline(model,col='red') 
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We move on to finding the linear model for the stay variable with the regressors
+ being all the 4 other variables: 
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=F>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+linmodel<-lm(stay~.,data=df) 
+\end_layout
+
+\begin_layout Plain Layout
+
+summary(linmodel) 
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The fitted model is: 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+y=1.813602+0.087470x_{1}+0.640635x_{2}+0.003169x_{3}−0.009508x_{4}
+\]
+
+\end_inset
+
+ where: 
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $y$
+\end_inset
+
+: the average length of hospital stay of all patients in hospital 
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $x_{1}$
+\end_inset
+
+: the average age of patients (in years) 
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $x_{2}$
+\end_inset
+
+: the average estimated probability of acquiring infection in hospital (in
+ percentage) 
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $x_{3}$
+\end_inset
+
+: the average number of beds in the hospital during study period 
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $x_{4}$
+\end_inset
+
+: the available facilities and services 
+\end_layout
+
+\begin_layout Standard
+The coefficients on service differs in the two types of linear regression.
+ We note that in the first case, the p-value is 0.000111 which rejects the
+ null hypothesis at 5% level that the coeficient is not statistically significan
+t.
+ Hence, in the first case, we accept the alternative that it is statistically
+ significant.
+ However, in the second case, the p-value comes out as 0.55528.
+ Thus, we accept the null hypothesis at 5% level that the coefficient is
+ statistically significant.
+ 
+\end_layout
+
+\begin_layout Standard
+We plot the residual vs predictor variable graphs for all the predictor
+ variables:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=F>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+par(mfrow=c(2,2))
+\end_layout
+
+\begin_layout Plain Layout
+
+sapply(2:ncol(df),
+\backslash
+(col) plot(df[,col], 
+\end_layout
+
+\begin_layout Plain Layout
+
+                         residuals(linmodel), 
+\end_layout
+
+\begin_layout Plain Layout
+
+                         xlab=colnames(df)[col], 
+\end_layout
+
+\begin_layout Plain Layout
+
+                         ylab='residuals', 
+\end_layout
+
+\begin_layout Plain Layout
+
+                         main=paste(names(df)[col],'vs.
+ Residuals'), 
+\end_layout
+
+\begin_layout Plain Layout
+
+                         pch=19,col=rgb(0.78,0.89,1,alpha=0.65))) 
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We plot the qqplot and find the following graph:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=F>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+qqnorm(residuals(linmodel),pch=19,col='palegreen') 
+\end_layout
+
+\begin_layout Plain Layout
+
+qqline(residuals(linmodel),col='red') 
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We note that, while keeping the other variables fixed, with every unit change
+ in the average measurement of they stay variable, the value of infection
+ risk will change by 0.640635 on an average.
+ We find the p-value of our test to be:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=F>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+summary(linmodel)$coefficients[3,4]
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Thus, we reject our null hypothesis that the slope is insignificant with
+ α = 0.05 level of significance.
+ 
+\end_layout
+
+\begin_layout Standard
+After fitting the model, we find the root mean squared error to be:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=F>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+library(Metrics) 
+\end_layout
+
+\begin_layout Plain Layout
+
+rmse(df$stay,fitted(linmodel))
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We note that the root mean squared error is very low.
+ Hence, we can conclude that the model in general is a good fit.
+ 
+\end_layout
+
+\begin_layout Standard
+We obtain an interval estimate of the expected value of average length of
+ hospital stay when average age=54, number of beds=100, infection risk=5%,
+ and service=30% at 95% confidence interval and we get it as:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=F>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+predict(linmodel, 
+\end_layout
+
+\begin_layout Plain Layout
+
+                 newdata=data.frame(age=54, infectionRisk=5,numBeds=100,
+ facilities=30), 
+\end_layout
+
+\begin_layout Plain Layout
+
+                 interval='confidence',level=0.95)
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This implies, that if we take 100 samples with the given conditions, in
+ 95 times, our predicted variable will lie in between these two limits.
+ 
+\end_layout
+
+\begin_layout Standard
+We obtain a prediction interval for the average length of stay for a new
+ hospital with average age=58, number of beds=200, infection risk=6%, and
+ service=40% at 99% confidence interval and we get it as:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=F>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+predict(linmodel, 
+\end_layout
+
+\begin_layout Plain Layout
+
+                 newdata=data.frame(age=58, infectionRisk=6,numBeds=200,
+ facilities=40), 
+\end_layout
+
+\begin_layout Plain Layout
+
+                 interval='prediction',level=0.99)
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document
