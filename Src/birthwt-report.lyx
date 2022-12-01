@@ -1,0 +1,704 @@
+#LyX 2.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 544
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\use_default_options true
+\begin_modules
+knitr
+\end_modules
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\use_minted 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Report on birthwt Data Set
+\end_layout
+
+\begin_layout Author
+Saikat Bera, Presidency University, KOLKATA
+\end_layout
+
+\begin_layout Abstract
+The birthwt data frame has 189 rows and 10 columns.
+ The data were collected at Baystate Medical Center, Springfield, Mass during
+ 1986.
+\end_layout
+
+\begin_layout Standard
+We will be using the birthwt dataset from the MASS library.
+ We first load the dataset and run summary:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=F>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+library(MASS) 
+\end_layout
+
+\begin_layout Plain Layout
+
+data(birthwt) 
+\end_layout
+
+\begin_layout Plain Layout
+
+summary(birthwt) 
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This data frame contains the following columns:
+\end_layout
+
+\begin_layout Itemize
+low: indicator of birth weight less than 2.5 kg.
+\end_layout
+
+\begin_layout Itemize
+age: mother's age in years.
+\end_layout
+
+\begin_layout Itemize
+lwt: mother's weight in pounds at last menstrual period.
+\end_layout
+
+\begin_layout Itemize
+race: mother's race (1 = white, 2 = black, 3 = other).
+\end_layout
+
+\begin_layout Itemize
+smoke: smoking status during pregnancy.
+\end_layout
+
+\begin_layout Itemize
+ptl: number of previous premature labours.
+\end_layout
+
+\begin_layout Itemize
+ht: history of hypertension.
+\end_layout
+
+\begin_layout Itemize
+ui: presence of uterine irritability.
+\end_layout
+
+\begin_layout Itemize
+ftv: number of physician visits during the first trimester.
+\end_layout
+
+\begin_layout Itemize
+bwt: birth weight in grams.
+\end_layout
+
+\begin_layout Standard
+We fit a model predicting birth weight using mother’s age, mother’s weight,
+ smoking status, self-reported race, and number of previous premature labors.
+ The selected race for reference is the Caucasian group.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=F>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+df<-data.frame(bwt=birthwt$bwt, 
+\end_layout
+
+\begin_layout Plain Layout
+
+               age=birthwt$age, 
+\end_layout
+
+\begin_layout Plain Layout
+
+               lwt=birthwt$lwt, 
+\end_layout
+
+\begin_layout Plain Layout
+
+              smoke=factor(birthwt$smoke,labels=c('no','yes')), 
+\end_layout
+
+\begin_layout Plain Layout
+
+              race=factor(birthwt$race,labels=c('white','black','other')),
+ 
+\end_layout
+
+\begin_layout Plain Layout
+
+              ptl=birthwt$ptl) 
+\end_layout
+
+\begin_layout Plain Layout
+
+head(df) 
+\end_layout
+
+\begin_layout Plain Layout
+
+model<-lm(bwt~.,data=df) 
+\end_layout
+
+\begin_layout Plain Layout
+
+summary(model)
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Keeping all the other variables fixed, babies of black mothers are born
+ on average weighing more than babies of white mothers.
+ The amount of more weight is given by the coefficient:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=F>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+coefficients(model)['raceblack'] 
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Similarly, keeping all the other variables fixed, babies of other mothers
+ are born on average weighing more than babies of white mothers.
+ The amount of more weight is given by the coefficient:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=F>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+coefficients(model)['raceother'] 
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+By a similar argument, we can say that keeping all other variables fixed,
+ babies of mothers who smoke are born on average weighing more than babies
+ of white mothers.
+ The amount of more weight is given by the coefficient:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=F>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+coefficients(model)['raceother']  
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We re-designed the model to find the coefficient of non-Caucasian vs.
+ Caucasian: 
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=F>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+df<-data.frame(bwt=birthwt$bwt, age=birthwt$age, lwt=birthwt$lwt, 
+\end_layout
+
+\begin_layout Plain Layout
+
+               smoke=factor(birthwt$smoke,labels=c('no','yes')), 
+\end_layout
+
+\begin_layout Plain Layout
+
+               race=factor(birthwt$race==1,labels=c('Caucasian','Non-Caucasian')
+), 
+\end_layout
+
+\begin_layout Plain Layout
+
+               ptl=birthwt$ptl) 
+\end_layout
+
+\begin_layout Plain Layout
+
+model<-lm(bwt~.,data=df) 
+\end_layout
+
+\begin_layout Plain Layout
+
+summary(model)
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The interpretation would be like this: Keeping all the other variables fixed,
+ babies of Non-Caucasian mothers are born on average weighing more than
+ babies of Caucasian mothers.
+ The amount of more weight is given by this coefficient: 
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=F>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+coefficients(model)['raceNon-Caucasian']  
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We note that all the variables approximately retained their previous estimates
+ and no new variables became insignificant.
+ However, the standard error decreased slightly.
+ 
+\end_layout
+
+\begin_layout Standard
+We might ignore the age variable as it is insignificant.
+ 
+\end_layout
+
+\begin_layout Standard
+There are only a few unique values for number of previous premature labors;
+ we might be better off treating this variable as categorical.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=F>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+df<-data.frame(bwt=birthwt$bwt, lwt=birthwt$lwt, 
+\end_layout
+
+\begin_layout Plain Layout
+
+               smoke=factor(birthwt$smoke,labels=c('no','yes')), 
+\end_layout
+
+\begin_layout Plain Layout
+
+               race=factor(birthwt$race==1,labels=c('Caucasian','Non-Caucasian')
+), 
+\end_layout
+
+\begin_layout Plain Layout
+
+               ptl=factor(birthwt$ptl)) 
+\end_layout
+
+\begin_layout Plain Layout
+
+model<-lm(bwt~.,data=df) 
+\end_layout
+
+\begin_layout Plain Layout
+
+summary(model)
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Looking at the p-values, I would rather classify this variable in three
+ factors: 0,1, and greater than 1.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=F>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+birthwt[birthwt$ptl==2|birthwt$ptl==3,]$ptl<-2 
+\end_layout
+
+\begin_layout Plain Layout
+
+df<-data.frame(bwt=birthwt$bwt, lwt=birthwt$lwt, 
+\end_layout
+
+\begin_layout Plain Layout
+
+               smoke=factor(birthwt$smoke,labels=c('no','yes')), 
+\end_layout
+
+\begin_layout Plain Layout
+
+               race=factor(birthwt$race==1,labels=c('Caucasian','Non-Caucasian')
+), 
+\end_layout
+
+\begin_layout Plain Layout
+
+               ptl=factor(birthwt$ptl)) 
+\end_layout
+
+\begin_layout Plain Layout
+
+model<-lm(bwt~.,data=df) 
+\end_layout
+
+\begin_layout Plain Layout
+
+summary(model) 
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The p-values of ptl1 and ptl2 are very high, indicating they are not significant.
+ Thus, we can model taking this variable as: 0 and greater than 0.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=F>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+birthwt[birthwt$ptl!=0,]$ptl<-1 
+\end_layout
+
+\begin_layout Plain Layout
+
+df<-data.frame(bwt=birthwt$bwt, lwt=birthwt$lwt, 
+\end_layout
+
+\begin_layout Plain Layout
+
+               smoke=factor(birthwt$smoke,labels=c('no','yes')), 
+\end_layout
+
+\begin_layout Plain Layout
+
+               race=factor(birthwt$race==1,labels=c('Caucasian','Non-Caucasian')
+), 
+\end_layout
+
+\begin_layout Plain Layout
+
+               ptl=factor(birthwt$ptl)) 
+\end_layout
+
+\begin_layout Plain Layout
+
+model<-lm(bwt~.,data=df) 
+\end_layout
+
+\begin_layout Plain Layout
+
+summary(model)
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+I will choose the last model for regression.
+ This is because among the previous models, this model would have almost
+ all the variables that are significant.
+ However, we are losing much information about the number of premature labours.
+ 
+\end_layout
+
+\begin_layout Standard
+Leaving race as non-Caucasian vs.
+ Caucasian and premature labors as > 0 vs.
+ 0, we can also take into account the number of physician visits during
+ the first trimester.
+ We model using the factor as 0 visits and greater than 0 visits.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<echo=F>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+birthwt[birthwt$ftv>0,]$ftv<-1 
+\end_layout
+
+\begin_layout Plain Layout
+
+df<-data.frame(bwt=birthwt$bwt, age=birthwt$age, lwt=birthwt$lwt, 
+\end_layout
+
+\begin_layout Plain Layout
+
+               smoke=factor(birthwt$smoke,labels=c('no','yes')), 
+\end_layout
+
+\begin_layout Plain Layout
+
+               race=factor(birthwt$race==1,labels=c('Caucasian','Non-Caucasian')
+), 
+\end_layout
+
+\begin_layout Plain Layout
+
+               ptl=factor(birthwt$ptl), ftv=factor(birthwt$ftv)) 
+\end_layout
+
+\begin_layout Plain Layout
+
+model<-lm(bwt~.,data=df) 
+\end_layout
+
+\begin_layout Plain Layout
+
+summary(model) 
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Reference:-
+\end_layout
+
+\begin_layout Standard
+Venables, W.
+ N.
+ and Ripley, B.
+ D.
+ (2002) Modern Applied Statistics with S.
+ Fourth edition.
+ Springer.
+\end_layout
+
+\end_body
+\end_document

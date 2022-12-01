@@ -675,7 +675,7 @@ status open
 
 \begin_layout Plain Layout
 
-<<echo=F>>=
+<<echo=F, warning=F>>=
 \end_layout
 
 \begin_layout Plain Layout
