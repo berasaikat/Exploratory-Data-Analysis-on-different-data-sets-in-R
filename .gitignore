@@ -3,7 +3,6 @@
 *.aux
 *.fdb_latexmk
 *.fls
-*.txt
 *.out
 *.log
 *.bib
@@ -20,4 +19,3 @@
 .Rproj.user
 *desktop.ini
 *.Rproj
-/Shiny/Data
