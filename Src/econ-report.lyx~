@@ -80,6 +80,24 @@ knitr
 
 \begin_body
 
+\begin_layout Title
+Report on econ Data Set
+\end_layout
+
+\begin_layout Author
+Saikat Bera, Presidency University, KOLKATA
+\end_layout
+
+\begin_layout Abstract
+The data file econ.csv contains information about the economies of the 366
+ “metropolitan statistical areas” ( cities) of the US in 2006.
+ In particular, it lists, for each city, the population, the total value
+ of all goods and services produced for sale in the city that year per person
+ (“per capita gross metropolitan product”, pcgmp), and the share of economic
+ output coming from four selected industries.
+ 
+\end_layout
+
 \begin_layout Standard
 Loading the data file econ.csv which contains information about the economies
  of the 366 
@@ -240,8 +258,8 @@ par(mfrow=c(1,2))
 
 \begin_layout Plain Layout
 
-hist(pop,xlab="Population",main="Histogram of Population",col="lightblue",breaks
-=50) 
+hist(pop,xlab="Population",main="Histogram of Population",col="midnightblue",bre
+aks=50,border='midnightblue') 
 \end_layout
 
 \begin_layout Plain Layout
@@ -290,8 +308,13 @@ status open
 
 \begin_layout Plain Layout
 
-plot(pop,pcgmp,xlab="Population",ylab="per-capita GMP", main="Scatterplot
- of per-capita GMP vs population",pch=19)
+plot(pop,pcgmp,xlab="Population",ylab="per-capita GMP", 
+\end_layout
+
+\begin_layout Plain Layout
+
+      main="Scatterplot of per-capita GMP vs population",pch=19,col='deepskyblue
+3')
 \end_layout
 
 \begin_layout Plain Layout
@@ -425,8 +448,13 @@ status open
 
 \begin_layout Plain Layout
 
-plot(pop,pcgmp,xlab="Population",ylab="per-capita GMP", main="Scatterplot
- of per-capita GMP vs population",pch=19)
+plot(pop,pcgmp,xlab="Population",ylab="per-capita GMP", 
+\end_layout
+
+\begin_layout Plain Layout
+
+     main="Scatterplot of per-capita GMP vs population",pch=19,col='deepskyblue'
+)
 \end_layout
 
 \begin_layout Plain Layout
@@ -440,7 +468,7 @@ plot(pop,pcgmp,xlab="Population",ylab="per-capita GMP", main="Scatterplot
 
 \begin_layout Plain Layout
 
-abline(a=intercept,b=slope)
+abline(a=intercept,b=slope,col='deepskyblue4')
 \end_layout
 
 \begin_layout Plain Layout
@@ -511,7 +539,7 @@ Residual Plot
 \begin_inset Quotes erd
 \end_inset
 
-)
+,col='darkslateblue')
 \end_layout
 
 \begin_layout Plain Layout

@@ -1479,5 +1479,20 @@ Since non-accidental deaths can differ by some other reason such as, cancer
 p between temperature and deaths.
 \end_layout
 
+\begin_layout Standard
+
+\series bold
+References
+\series default
+:
+\end_layout
+
+\begin_layout Standard
+Roger D.
+ Peng, Leah J.
+ Welty and Aiden McDermott.
+ R package NMMAPSdata.
+\end_layout
+
 \end_body
 \end_document

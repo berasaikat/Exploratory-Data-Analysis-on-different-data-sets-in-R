@@ -392,7 +392,12 @@ for(j in 1:(ncol(chicago)))
 
 \begin_layout Plain Layout
 
-    hist(chicago[,j],xlab=colnames(chicago)[j],main=paste(
+    hist(chicago[,j],xlab=colnames(chicago)[j],
+\end_layout
+
+\begin_layout Plain Layout
+
+    main=paste(
 \begin_inset Quotes eld
 \end_inset
 
@@ -400,15 +405,20 @@ Histogram of
 \begin_inset Quotes erd
 \end_inset
 
-,colnames(chicago)[j]),col=
+,colnames(chicago)[j]),
+\end_layout
+
+\begin_layout Plain Layout
+
+    col=
 \begin_inset Quotes erd
 \end_inset
 
-lightblue
+lightseagreen
 \begin_inset Quotes erd
 \end_inset
 
-,breaks=25)
+, border='aliceblue', breaks=25)
 \end_layout
 
 \begin_layout Plain Layout
@@ -514,7 +524,12 @@ death
 \begin_inset Quotes erd
 \end_inset
 
-,main=
+,
+\end_layout
+
+\begin_layout Plain Layout
+
+      main=
 \begin_inset Quotes erd
 \end_inset
 
@@ -522,7 +537,7 @@ Scatterplot of pm10median against death
 \begin_inset Quotes erd
 \end_inset
 
-,pch=16)
+,pch=16,col='orchid1')
 \end_layout
 
 \begin_layout Plain Layout
@@ -543,7 +558,12 @@ death
 \begin_inset Quotes erd
 \end_inset
 
-,main=
+,
+\end_layout
+
+\begin_layout Plain Layout
+
+      main=
 \begin_inset Quotes erd
 \end_inset
 
@@ -551,7 +571,7 @@ Scatterplot of pm25median against death
 \begin_inset Quotes erd
 \end_inset
 
-,pch=8)
+,pch=8,col='purple1')
 \end_layout
 
 \begin_layout Plain Layout
@@ -572,7 +592,12 @@ death
 \begin_inset Quotes erd
 \end_inset
 
-,main=
+,
+\end_layout
+
+\begin_layout Plain Layout
+
+      main=
 \begin_inset Quotes erd
 \end_inset
 
@@ -580,7 +605,7 @@ Scatterplot of o3median against death
 \begin_inset Quotes erd
 \end_inset
 
-,pch=23)
+,pch=23,col='orchid2')
 \end_layout
 
 \begin_layout Plain Layout
@@ -601,7 +626,12 @@ death
 \begin_inset Quotes erd
 \end_inset
 
-,main=
+,
+\end_layout
+
+\begin_layout Plain Layout
+
+      main=
 \begin_inset Quotes erd
 \end_inset
 
@@ -609,7 +639,7 @@ Scatterplot of so2median against death
 \begin_inset Quotes erd
 \end_inset
 
-,pch=15)
+,pch=15,col='purple2')
 \end_layout
 
 \begin_layout Plain Layout
@@ -630,7 +660,12 @@ death
 \begin_inset Quotes erd
 \end_inset
 
-,main=
+,
+\end_layout
+
+\begin_layout Plain Layout
+
+      main=
 \begin_inset Quotes erd
 \end_inset
 
@@ -638,7 +673,7 @@ Scatterplot of time against death
 \begin_inset Quotes erd
 \end_inset
 
-,pch=10)
+,pch=10,col='orchid3')
 \end_layout
 
 \begin_layout Plain Layout
@@ -659,7 +694,12 @@ death
 \begin_inset Quotes erd
 \end_inset
 
-,main=
+,
+\end_layout
+
+\begin_layout Plain Layout
+
+      main=
 \begin_inset Quotes erd
 \end_inset
 
@@ -667,7 +707,7 @@ Scatterplot of tmpd against death
 \begin_inset Quotes erd
 \end_inset
 
-,pch=11)
+,pch=11,col='purple3')
 \end_layout
 
 \begin_layout Plain Layout
@@ -1299,7 +1339,12 @@ Mortality (deaths/day)
 \begin_inset Quotes erd
 \end_inset
 
-,main=
+,
+\end_layout
+
+\begin_layout Plain Layout
+
+      main=
 \begin_inset Quotes erd
 \end_inset
 
@@ -1311,7 +1356,7 @@ Scatterplot of death vs tmpd
 \begin_inset Quotes erd
 \end_inset
 
-grey
+aquamarine
 \begin_inset Quotes erd
 \end_inset
 
@@ -1329,7 +1374,7 @@ abline(a=130,b=-0.28,col=
 \begin_inset Quotes erd
 \end_inset
 
-blue
+aquamarine4
 \begin_inset Quotes erd
 \end_inset
 

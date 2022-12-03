@@ -258,14 +258,14 @@ par(mfrow=c(1,2))
 
 \begin_layout Plain Layout
 
-hist(pop,xlab="Population",main="Histogram of Population",col="lightblue",breaks
-=50) 
+hist(pop,xlab="Population",main="Histogram of Population",col="midnightblue",bre
+aks=50,border='gray15') 
 \end_layout
 
 \begin_layout Plain Layout
 
-hist(pcgmp,xlab="per-capita GMP",main="Histogram of per-capita GMP",col="lightbl
-ue",breaks=20)
+hist(pcgmp,xlab="per-capita GMP",main="Histogram of per-capita GMP",col="midnigh
+tblue",breaks=20,border='gray15')
 \end_layout
 
 \begin_layout Plain Layout
@@ -308,8 +308,13 @@ status open
 
 \begin_layout Plain Layout
 
-plot(pop,pcgmp,xlab="Population",ylab="per-capita GMP", main="Scatterplot
- of per-capita GMP vs population",pch=19)
+plot(pop,pcgmp,xlab="Population",ylab="per-capita GMP", 
+\end_layout
+
+\begin_layout Plain Layout
+
+      main="Scatterplot of per-capita GMP vs population",pch=19,col='deepskyblue
+3')
 \end_layout
 
 \begin_layout Plain Layout
@@ -443,8 +448,12 @@ status open
 
 \begin_layout Plain Layout
 
-plot(pop,pcgmp,xlab="Population",ylab="per-capita GMP", main="Scatterplot
- of per-capita GMP vs population",pch=19)
+plot(pop,pcgmp,xlab="Population",ylab="per-capita GMP", 
+\end_layout
+
+\begin_layout Plain Layout
+
+     main="Scatterplot of per-capita GMP vs population",pch=19,col='lightcoral')
 \end_layout
 
 \begin_layout Plain Layout
@@ -458,7 +467,7 @@ plot(pop,pcgmp,xlab="Population",ylab="per-capita GMP", main="Scatterplot
 
 \begin_layout Plain Layout
 
-abline(a=intercept,b=slope)
+abline(a=intercept,b=slope,col='forestgreen')
 \end_layout
 
 \begin_layout Plain Layout
@@ -529,7 +538,7 @@ Residual Plot
 \begin_inset Quotes erd
 \end_inset
 
-)
+,col='darkslateblue')
 \end_layout
 
 \begin_layout Plain Layout
