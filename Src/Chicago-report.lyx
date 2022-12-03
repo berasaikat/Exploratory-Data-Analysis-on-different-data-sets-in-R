@@ -1,0 +1,1483 @@
+#LyX 2.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 544
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\use_default_options true
+\begin_modules
+knitr
+\end_modules
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\use_minted 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Report on Chicago Data Set
+\end_layout
+
+\begin_layout Author
+Saikat Bera, Presidency University, KOLKATA
+\end_layout
+
+\begin_layout Abstract
+The data set chicago, in the package gamair, contains data about air pollution
+ and the death rate in Chicago from 1 January 1987 to 31 December 2000.
+ Our response variable of interest is death, the total number of non-accidental
+ deaths each day.
+ The other variables in the data set are time, recorded in days before or
+ after 31 December 1993, and five possible predictor variables: 
+\end_layout
+
+\begin_layout Itemize
+pm10median: the median density over the city of large pollutant particles
+ 
+\end_layout
+
+\begin_layout Itemize
+pm25median: the median density of smaller pollutant particles 
+\end_layout
+
+\begin_layout Itemize
+o3median: the median concentration of ozone (O3) in the air
+\end_layout
+
+\begin_layout Itemize
+so2median: the median concentration of sulfur dioxide (SO2) in the air 
+\end_layout
+
+\begin_layout Itemize
+tmpd: the mean daily temperature.
+\end_layout
+
+\begin_layout Standard
+Loading the dataset in R,
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+<<echo=F, warning=F>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+library(gamair)
+\end_layout
+
+\begin_layout Plain Layout
+
+data(chicago)
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+<<echo=F>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+#...summary on each variable
+\end_layout
+
+\begin_layout Plain Layout
+
+summary(chicago)
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Examining the variables:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+<<echo=F>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+max(chicago$tmpd)
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Clearly, if the temperature is measured in degrees Celsius then 92 degree
+ Celsius is extremely high to be the temperature of a city.
+ So, the temperature must be given in degrees Fahrenheit.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+<<echo=F>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+summary(chicago$pm25median)
+\end_layout
+
+\begin_layout Plain Layout
+
+nrow(chicago)
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Clearly, 4387 values of the variable 
+\series bold
+pm25median
+\series default
+ are missing among the total 5114 observations.
+ We cannot work with such a variable with so many missing values.
+ So, we shall ignore this variable.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+<<echo=F>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+mvm<-function(x)
+\end_layout
+
+\begin_layout Plain Layout
+
+{
+\end_layout
+
+\begin_layout Plain Layout
+
+    a=mean(x,na.rm=T)
+\end_layout
+
+\begin_layout Plain Layout
+
+    b=var(x,na.rm=T)
+\end_layout
+
+\begin_layout Plain Layout
+
+    c=median(x,na.rm=T)
+\end_layout
+
+\begin_layout Plain Layout
+
+    return(data.frame(mean=a,variance=b,median=c))
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+mvm(chicago$death)
+\end_layout
+
+\begin_layout Plain Layout
+
+mvm(chicago$pm10median)
+\end_layout
+
+\begin_layout Plain Layout
+
+mvm(chicago$pm25median)
+\end_layout
+
+\begin_layout Plain Layout
+
+mvm(chicago$o3median)
+\end_layout
+
+\begin_layout Plain Layout
+
+mvm(chicago$so2median)
+\end_layout
+
+\begin_layout Plain Layout
+
+mvm(chicago$time)
+\end_layout
+
+\begin_layout Plain Layout
+
+mvm(chicago$tmpd)
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+<<echo=F>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+par(mfrow=c(4,2))
+\end_layout
+
+\begin_layout Plain Layout
+
+for(j in 1:(ncol(chicago)))
+\end_layout
+
+\begin_layout Plain Layout
+
+{
+\end_layout
+
+\begin_layout Plain Layout
+
+    hist(chicago[,j],xlab=colnames(chicago)[j],
+\end_layout
+
+\begin_layout Plain Layout
+
+    main=paste(
+\begin_inset Quotes eld
+\end_inset
+
+Histogram of
+\begin_inset Quotes erd
+\end_inset
+
+,colnames(chicago)[j]),
+\end_layout
+
+\begin_layout Plain Layout
+
+    col=
+\begin_inset Quotes erd
+\end_inset
+
+lightseagreen
+\begin_inset Quotes erd
+\end_inset
+
+, border='aliceblue', breaks=25)
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+From the histograms we can learn a lot of things regarding the variables,
+\end_layout
+
+\begin_layout Itemize
+From the histogram of the death variable we can observe that, the central
+ tendency in near 115 deaths per day, the distribution is almost symmetric
+ and is close to normally distributed.
+ There are many outliers present.
+\end_layout
+
+\begin_layout Itemize
+From the histogram of the pm10median variable we can observe that, the central
+ tendency in near 0, the distribution is positively skewed with a high number
+ of potential outliers.
+\end_layout
+
+\begin_layout Itemize
+From the histogram of the pm25median variable we can observe that, the central
+ tendency in near 0, the distribution is positively skewed.
+ There are no such potential outliers.
+\end_layout
+
+\begin_layout Itemize
+From the histogram of the o3median variable we can observe that, the central
+ tendency in near -5, the distribution is quite positively skewed with few
+ potential outliers.
+\end_layout
+
+\begin_layout Itemize
+From the histogram of the so2median variable we can observe that, the central
+ tendency in near -2, the distribution is positively skewed with a high
+ number of potential outliers.
+\end_layout
+
+\begin_layout Itemize
+From the histogram of the time variable we can observe that, the central
+ tendency in near 0, the distribution is symmetric and is close to uniformly
+ distributed.
+ 
+\end_layout
+
+\begin_layout Itemize
+From the histogram of the tmpd variable we can observe that, the central
+ tendency in near 50, the distribution is negatively skewed.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+<<echo=F>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+#...plotting of each predicter variable against the response variable
+\end_layout
+
+\begin_layout Plain Layout
+
+par(mfrow=c(3,2))
+\end_layout
+
+\begin_layout Plain Layout
+
+plot(chicago$pm10median,chicago$death,xlab=
+\begin_inset Quotes erd
+\end_inset
+
+pm10median
+\begin_inset Quotes erd
+\end_inset
+
+,ylab=
+\begin_inset Quotes erd
+\end_inset
+
+death
+\begin_inset Quotes erd
+\end_inset
+
+,
+\end_layout
+
+\begin_layout Plain Layout
+
+      main=
+\begin_inset Quotes erd
+\end_inset
+
+Scatterplot of pm10median against death
+\begin_inset Quotes erd
+\end_inset
+
+,pch=16,col='orchid1')
+\end_layout
+
+\begin_layout Plain Layout
+
+plot(chicago$pm25median,chicago$death,xlab=
+\begin_inset Quotes erd
+\end_inset
+
+pm25median
+\begin_inset Quotes erd
+\end_inset
+
+,ylab=
+\begin_inset Quotes erd
+\end_inset
+
+death
+\begin_inset Quotes erd
+\end_inset
+
+,
+\end_layout
+
+\begin_layout Plain Layout
+
+      main=
+\begin_inset Quotes erd
+\end_inset
+
+Scatterplot of pm25median against death
+\begin_inset Quotes erd
+\end_inset
+
+,pch=8,col='purple1')
+\end_layout
+
+\begin_layout Plain Layout
+
+plot(chicago$o3median,chicago$death,xlab=
+\begin_inset Quotes erd
+\end_inset
+
+o3median
+\begin_inset Quotes erd
+\end_inset
+
+,ylab=
+\begin_inset Quotes erd
+\end_inset
+
+death
+\begin_inset Quotes erd
+\end_inset
+
+,
+\end_layout
+
+\begin_layout Plain Layout
+
+      main=
+\begin_inset Quotes erd
+\end_inset
+
+Scatterplot of o3median against death
+\begin_inset Quotes erd
+\end_inset
+
+,pch=23,col='orchid2')
+\end_layout
+
+\begin_layout Plain Layout
+
+plot(chicago$so2median,chicago$death,xlab=
+\begin_inset Quotes erd
+\end_inset
+
+so2median
+\begin_inset Quotes erd
+\end_inset
+
+,ylab=
+\begin_inset Quotes erd
+\end_inset
+
+death
+\begin_inset Quotes erd
+\end_inset
+
+,
+\end_layout
+
+\begin_layout Plain Layout
+
+      main=
+\begin_inset Quotes erd
+\end_inset
+
+Scatterplot of so2median against death
+\begin_inset Quotes erd
+\end_inset
+
+,pch=15,col='purple2')
+\end_layout
+
+\begin_layout Plain Layout
+
+plot(chicago$time,chicago$death,xlab=
+\begin_inset Quotes erd
+\end_inset
+
+time
+\begin_inset Quotes erd
+\end_inset
+
+,ylab=
+\begin_inset Quotes erd
+\end_inset
+
+death
+\begin_inset Quotes erd
+\end_inset
+
+,
+\end_layout
+
+\begin_layout Plain Layout
+
+      main=
+\begin_inset Quotes erd
+\end_inset
+
+Scatterplot of time against death
+\begin_inset Quotes erd
+\end_inset
+
+,pch=10,col='orchid3')
+\end_layout
+
+\begin_layout Plain Layout
+
+plot(chicago$tmpd,chicago$death,xlab=
+\begin_inset Quotes erd
+\end_inset
+
+tmpd
+\begin_inset Quotes erd
+\end_inset
+
+,ylab=
+\begin_inset Quotes erd
+\end_inset
+
+death
+\begin_inset Quotes erd
+\end_inset
+
+,
+\end_layout
+
+\begin_layout Plain Layout
+
+      main=
+\begin_inset Quotes erd
+\end_inset
+
+Scatterplot of tmpd against death
+\begin_inset Quotes erd
+\end_inset
+
+,pch=11,col='purple3')
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+From the scatterplots it is evident that, all the scatterplots are almost
+ linear with slope 0, except the scatterplot of death against time.
+ 
+\end_layout
+
+\begin_layout Standard
+\paragraph_spacing onehalf
+So, the response variable death may not have any type of relation (i.e.
+ may not be dependent on) with any of the predictor variables pm10median,
+ pm25median, o3median, so2median and tmpd.
+ There is a sinusoidal relation between time and death.
+\end_layout
+
+\begin_layout Standard
+From the scatterplots clearly we can see that there are outliers in each
+ plot.
+\end_layout
+
+\begin_layout Standard
+The corresponding days where we see outliers in the plot of pm10median against
+ death:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+<<echo=F>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+#...outlier days for the plot of pm10median against death
+\end_layout
+
+\begin_layout Plain Layout
+
+out=boxplot.stats(chicago$pm10median)$out
+\end_layout
+
+\begin_layout Plain Layout
+
+out_ind=which(chicago$pm10median%in%out)
+\end_layout
+
+\begin_layout Plain Layout
+
+day1=chicago$time[out_ind]
+\end_layout
+
+\begin_layout Plain Layout
+
+day1
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The corresponding days where we see outliers in the plot of pm25median against
+ death:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+<<echo=F>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+#...outlier days for the plot of pm25median against death
+\end_layout
+
+\begin_layout Plain Layout
+
+out=boxplot.stats(chicago$pm25median)$out
+\end_layout
+
+\begin_layout Plain Layout
+
+out_ind=which(chicago$pm25median%in%out)
+\end_layout
+
+\begin_layout Plain Layout
+
+day2=chicago$time[out_ind]
+\end_layout
+
+\begin_layout Plain Layout
+
+day2
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The corresponding days where we see outliers in the plot of o3median against
+ death:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+<<echo=F>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+#...outlier days for the plot of o3median against death
+\end_layout
+
+\begin_layout Plain Layout
+
+out=boxplot.stats(chicago$o3median)$out
+\end_layout
+
+\begin_layout Plain Layout
+
+out_ind=which(chicago$o3median%in%out)
+\end_layout
+
+\begin_layout Plain Layout
+
+day3=chicago$time[out_ind]
+\end_layout
+
+\begin_layout Plain Layout
+
+day3
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The corresponding days where we see outliers in the plot of so2median against
+ death:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+<<echo=F>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+#...outlier days for the plot of so2median against death
+\end_layout
+
+\begin_layout Plain Layout
+
+out=boxplot.stats(chicago$so2median)$out
+\end_layout
+
+\begin_layout Plain Layout
+
+out_ind=which(chicago$so2median%in%out)
+\end_layout
+
+\begin_layout Plain Layout
+
+day4=chicago$time[out_ind]
+\end_layout
+
+\begin_layout Plain Layout
+
+day4
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The corresponding days where we see outliers in the plot of time against
+ death:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+<<echo=F>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+#...outlier days for the plot of time against death
+\end_layout
+
+\begin_layout Plain Layout
+
+out=boxplot.stats(chicago$time)$out
+\end_layout
+
+\begin_layout Plain Layout
+
+out_ind=which(chicago$time%in%out)
+\end_layout
+
+\begin_layout Plain Layout
+
+day5=chicago$time[out_ind]
+\end_layout
+
+\begin_layout Plain Layout
+
+day5
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The corresponding days where we see outliers in the plot of tmpd against
+ death:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+<<echo=F>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+#...outlier days for the plot of tmpd against death
+\end_layout
+
+\begin_layout Plain Layout
+
+out=boxplot.stats(chicago$tmpd)$out
+\end_layout
+
+\begin_layout Plain Layout
+
+out_ind=which(chicago$tmpd%in%out)
+\end_layout
+
+\begin_layout Plain Layout
+
+day6=chicago$time[out_ind]
+\end_layout
+
+\begin_layout Plain Layout
+
+day6
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+<<echo=F>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+#...code for finding if different plots share outlier days
+\end_layout
+
+\begin_layout Plain Layout
+
+sum(day1%in%day2)
+\end_layout
+
+\begin_layout Plain Layout
+
+sum(day1%in%day3)
+\end_layout
+
+\begin_layout Plain Layout
+
+sum(day1%in%day4)
+\end_layout
+
+\begin_layout Plain Layout
+
+sum(day1%in%day5)
+\end_layout
+
+\begin_layout Plain Layout
+
+sum(day1%in%day6)
+\end_layout
+
+\begin_layout Plain Layout
+
+sum(day2%in%day3)
+\end_layout
+
+\begin_layout Plain Layout
+
+sum(day2%in%day4)
+\end_layout
+
+\begin_layout Plain Layout
+
+sum(day2%in%day5)
+\end_layout
+
+\begin_layout Plain Layout
+
+sum(day2%in%day6)
+\end_layout
+
+\begin_layout Plain Layout
+
+sum(day3%in%day4)
+\end_layout
+
+\begin_layout Plain Layout
+
+sum(day3%in%day5)
+\end_layout
+
+\begin_layout Plain Layout
+
+sum(day3%in%day6)
+\end_layout
+
+\begin_layout Plain Layout
+
+sum(day4%in%day5)
+\end_layout
+
+\begin_layout Plain Layout
+
+sum(day4%in%day6)
+\end_layout
+
+\begin_layout Plain Layout
+
+sum(day5%in%day6)
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Hence, the plot of pm10median against death and the plot of pm25median against
+ death share 3 outlier days.
+\end_layout
+
+\begin_layout Itemize
+The plot of pm10median against death and the plot of o3median against death
+ share 13 outlier days.
+\end_layout
+
+\begin_layout Itemize
+The plot of pm10median against death and the plot of so2median against death
+ share 22 outlier days.
+\end_layout
+
+\begin_layout Itemize
+\paragraph_spacing onehalf
+\noindent
+The plot of o3median against death and the plot of so2median against death
+ share 9 outlier days.
+\end_layout
+
+\begin_layout Standard
+From the scatterplots it is evident that, all the scatterplots are almost
+ linear with slope 0, except the scatterplot of death against time.
+ So, except time for each predictor variable , fitting a linear regression
+ model of the number of deaths on the predictor will be meaningless.
+\end_layout
+
+\begin_layout Standard
+\paragraph_spacing onehalf
+Only for the time variable, we can justify the modeling assumptions to hold
+ as from the scatterplot it is evident that there is some sinusoidal relation
+ between time and death.
+\end_layout
+
+\begin_layout Standard
+The theoretical regression model between death and tmpd is as follows:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+<<echo=F>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+lm(formula=death~tmpd,data=chicago)
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The assumptions of the model are,
+\end_layout
+
+\begin_layout Standard
+The distribution of X is arbitrary.
+\end_layout
+
+\begin_layout Standard
+If X=x, then Y=
+\begin_inset Formula $\alpha+\beta x+\epsilon$
+\end_inset
+
+, for some parameters 
+\begin_inset Formula $\alpha$
+\end_inset
+
+ and 
+\begin_inset Formula $\beta$
+\end_inset
+
+, and some random noise variable 
+\begin_inset Formula $\epsilon$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+For all x, E[
+\begin_inset Formula $\epsilon|X=x$
+\end_inset
+
+]=0, Var[
+\begin_inset Formula $\epsilon|X=x$
+\end_inset
+
+]=
+\begin_inset Formula $\sigma^{2}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\paragraph_spacing onehalf
+\noindent
+\begin_inset Formula $\epsilon$
+\end_inset
+
+ is uncorrelated across observations.
+\end_layout
+
+\begin_layout Standard
+The interpretation of the constant term in the proposed regression function
+ is that, on an average, the expected number of non-accidental deaths per
+ day in Chicago is 130 when the mean daily temperature is 
+\begin_inset Formula $0^{\textdegree}F$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\paragraph_spacing onehalf
+The interpretation of the slope in the proposed regression function is that,
+ if we select two sets of cases from the un-manipulated distribution where
+ the mean daily temperature differs by 
+\begin_inset Formula $1\textdegree F$
+\end_inset
+
+, we expect the number of non-accidental deaths per day in Chicago to differ
+ by 0.28.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+<<echo=F>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+#...scatterplot of death vs tmpd
+\end_layout
+
+\begin_layout Plain Layout
+
+plot(death~tmpd,data=chicago,ylim=c(0,200),xlab=
+\begin_inset Quotes erd
+\end_inset
+
+Daily mean temperature (F)
+\begin_inset Quotes erd
+\end_inset
+
+,ylab=
+\begin_inset Quotes erd
+\end_inset
+
+Mortality (deaths/day)
+\begin_inset Quotes erd
+\end_inset
+
+,
+\end_layout
+
+\begin_layout Plain Layout
+
+      main=
+\begin_inset Quotes erd
+\end_inset
+
+Scatterplot of death vs tmpd
+\begin_inset Quotes erd
+\end_inset
+
+,pch=19,cex=0.5,col=
+\begin_inset Quotes erd
+\end_inset
+
+aquamarine
+\begin_inset Quotes erd
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Plain Layout
+
+#...proposed function
+\end_layout
+
+\begin_layout Plain Layout
+
+abline(a=130,b=-0.28,col=
+\begin_inset Quotes erd
+\end_inset
+
+aquamarine4
+\begin_inset Quotes erd
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We can assume that the model's error variables follow a normal distribution.
+ Since, the noise might be due to adding up the effects of lots of little
+ random causes, all nearly independent of each other and of X, where each
+ of the effects are of roughly similar magnitude.
+ Then due to the central limit theorem the sum of random errors will indeed
+ be pretty Gaussian.
+\end_layout
+
+\begin_layout Standard
+\paragraph_spacing onehalf
+Also, the Gaussian noise model helps us to work out a complete theory of
+ inference and prediction for the model by helping us to find closed forms
+ for estimates of the parameters,variances etc.
+\end_layout
+
+\begin_layout Standard
+The relation between the Fahrenheit scale and the Celsius scale is: 
+\begin_inset Formula $F=\left(\frac{9}{5}\times C\right)+32$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+So, 
+\begin_inset Formula $2\textdegree C$
+\end_inset
+
+ is equivalent to 
+\begin_inset Formula $35.6\textdegree F$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Now, for unit increase in temperature, we can expect the number of deaths
+ to decrease by 0.28 per day, according to the proposed linear regression
+ model.
+\end_layout
+
+\begin_layout Standard
+So, for an increase of 
+\begin_inset Formula $35.6\textdegree F$
+\end_inset
+
+ in temperature, we can expect the number of deaths to decrease by 
+\begin_inset Formula $\left(0.28\times35.6=\right)9.968$
+\end_inset
+
+ per day.
+ 
+\end_layout
+
+\begin_layout Standard
+Hence,the predicted change in number of deaths in a year will be, 
+\begin_inset Formula $9.968\times365=3638.32\thickapprox3638$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+\paragraph_spacing onehalf
+So, for 
+\begin_inset Formula $2\textdegree C$
+\end_inset
+
+ increase in average temperature over the course of a whole year, we can
+ expect the number of deaths to decrease by 3638 over the year.
+\end_layout
+
+\begin_layout Standard
+No, we cannot claim the relationship between temperature and deaths casual.
+ 
+\end_layout
+
+\begin_layout Standard
+\paragraph_spacing onehalf
+Since non-accidental deaths can differ by some other reason such as, cancer
+ or some severe illness, suicide etc, i.e.
+ there existsa third variable which is the underlined factor of such relationshi
+p between temperature and deaths.
+\end_layout
+
+\end_body
+\end_document
